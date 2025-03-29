@@ -16,7 +16,6 @@ int wmain(int argc, wchar_t* argv[]) {
 		return 1;
 	}
 	std::vector<std::wstring> files;
-	files.reserve(argc - 1); // Avoid reallocations on every push_back().
 	for (int i = 1; i < argc; ++i) files.push_back(fs::absolute(argv[i]).wstring());
 	copy_to_clipboard(files);
 	return 0;
