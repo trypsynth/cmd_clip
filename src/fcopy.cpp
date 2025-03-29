@@ -3,7 +3,6 @@
 #include <memory>
 #include <string>
 #include <vector>
-#define WIN32_LEAN_AND_MEAN
 #include <windows.h>
 #include <shlobj.h>
 
@@ -11,11 +10,12 @@ void copy_to_clipboard(const std::vector<std::wstring>& files);
 
 int wmain(int argc, wchar_t* argv[]) {
 	if (argc < 2) {
-		std::wcerr << L"Usage: " << argv[0] << " <file1> [file2 ...]\n";
+		std::wcerr << L"Usage: " << argv[0] << L" <file1> [file2 ...]\n";
 		return 1;
 	}
 	std::vector<std::wstring> files;
-	for (int i = 1; i < argc; ++i) files.push_back(std::filesystem::absolute(argv[i]));
+	files.reserve(argc - 1);
+	for (int i = 1; i < argc; ++i) files.push_back(std::filesystem::absolute(argv[i]).wstring());
 	copy_to_clipboard(files);
 	return 0;
 }
