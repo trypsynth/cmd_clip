@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <shlobj.h>
 
+namespace fs = std::filesystem;
+
 void copy_to_clipboard(const std::vector<std::wstring>& files);
 
 int wmain(int argc, wchar_t* argv[]) {
@@ -15,7 +17,7 @@ int wmain(int argc, wchar_t* argv[]) {
 	}
 	std::vector<std::wstring> files;
 	files.reserve(argc - 1);
-	for (int i = 1; i < argc; ++i) files.push_back(std::filesystem::absolute(argv[i]).wstring());
+	for (int i = 1; i < argc; ++i) files.push_back(fs::absolute(argv[i]).wstring());
 	copy_to_clipboard(files);
 	return 0;
 }

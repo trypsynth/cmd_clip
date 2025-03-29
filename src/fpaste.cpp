@@ -6,6 +6,8 @@
 #include <windows.h>
 #include <shellapi.h>
 
+namespace fs = std::filesystem;
+
 std::vector<std::wstring> get_clipboard_files();
 
 int wmain() {
@@ -14,11 +16,11 @@ int wmain() {
 		std::wcout << L"No files on clipboard.\n";
 		return 1;
 	}
-	auto cwd = std::filesystem::current_path();
+	auto cwd = fs::current_path();
 	for (const auto& file : files) {
-		auto dest = cwd / std::filesystem::path(file).filename();
+		auto dest = cwd / fs::path(file).filename();
 		std::wcout << L"Copying " << file << L" to " << dest << L"\n";
-		std::filesystem::copy(file, dest, std::filesystem::copy_options::overwrite_existing);
+		fs::copy(file, dest, fs::copy_options::overwrite_existing);
 	}
 	return 0;
 }
