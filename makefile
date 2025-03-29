@@ -2,14 +2,14 @@ CXX = g++
 CXXFLAGS = -Wall -Wextra -std=c++20 -municode -O2
 SRC = src
 BIN = bin
+PROGS = fcopy fpaste
 
-all: $(BIN)/fcopy $(BIN)/fpaste
+all: $(PROGS:%=$(BIN)/%)
 
-$(BIN)/fcopy: $(SRC)/fcopy.cpp
-	$(CXX) $(CXXFLAGS) -o $@ $<
-
-$(BIN)/fpaste: $(SRC)/fpaste.cpp
+$(BIN)/%: $(SRC)/%.cpp
 	$(CXX) $(CXXFLAGS) -o $@ $<
 
 clean:
-	rm -f $(BIN)/fcopy $(BIN)/fpaste
+	rm -f $(PROGS:%=$(BIN)/%)
+
+.PHONY: all clean
