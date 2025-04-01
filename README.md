@@ -1,43 +1,43 @@
 # cmd_clip
-This is a set of two simple Windows utilities for working with files on the clipboard:
-
-- **`fcopy`**: Copies files to the clipboard, similar to if you selected them in Windows Explorer and pressed Ctrl+C.
-- **`fpaste`**: Pastes files from the clipboard to the current directory.
+This is a set of Windows utilities for working with files on the clipboard in a format that Windows Explorer and similar programs can understand:
+* `fcopy`: Copies files to the clipboard, similar to selecting them in Windows Explorer and pressing Ctrl+C.
+* `fcut: Moves files to the clipboard, similar to Ctrl+X in Windows Explorer.
+* `fpaste`: Pastes files from the clipboard into the current directory.
+* `fclear`: Clears the clipboard of any copied or cut files.
+* `flist`: Lists files currently stored on the clipboard.
 
 ## Building
-
-Tested with WinLibs using G++ and Mingw32-make.
-
-To build:
-
+To build with CMake, follow these steps:
 ```sh
-mingw32-make
+mkdir build
+cd build
+cmake .. -DCMAKE_BUILD_TYPE=Release
+cmake --build . --config Release
 ```
-
-This will generate the `fcopy` and `fpaste` executables in the `bin` directory.
 
 ## Usage
 
-### `fcopy`
-
-Copy one or more files to the clipboard.
-
+### `fcopy` – Copy files to the clipboard
 ```sh
 fcopy <file1> [file2 ...]
 ```
 
-### `fpaste`
+### `fcut` – Cut (move) files to the clipboard
+```sh
+fcut <file1> [file2 ...]
+```
 
-Paste files from the clipboard into the current directory.
-
+### `fpaste` – Paste files from the clipboard
 ```sh
 fpaste
 ```
 
-## Clean
-
-To remove build artifacts:
-
+### `fclear` – Clear the clipboard
 ```sh
-mingw32-make clean
+fclear
+```
+
+### `flist` – List files currently on the clipboard
+```sh
+flist
 ```
