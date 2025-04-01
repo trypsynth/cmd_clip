@@ -33,42 +33,38 @@ int wmain(int argc, wchar_t** argv) {
 }
 
 void cut_to_clipboard(const std::vector<std::wstring>& files) {
-    if (files.empty()) return;
-    size_t total_size = sizeof(DROPFILES) + sizeof(wchar_t);
-    for (const auto& file : files) total_size += (file.size() + 1) * sizeof(wchar_t);
-    auto global_mem = std::unique_ptr<void, decltype(&GlobalFree)>(GlobalAlloc(GHND, total_size), GlobalFree);
-    if (!global_mem) return;
-    auto* df = static_cast<DROPFILES*>(GlobalLock(global_mem.get()));
-    if (!df) return;
-    df->pFiles = sizeof(DROPFILES);
-    df->fWide = TRUE;
-    wchar_t* data = reinterpret_cast<wchar_t*>(df + 1);
-    for (const auto& file : files) {
-        std::copy_n(file.c_str(), file.size(), data);
-        data += file.size();
-        *data++ = L'\0';
-    }
-    *data = L'\0';
-    GlobalUnlock(global_mem.get());
-    if (OpenClipboard(nullptr)) {
-        EmptyClipboard();
-        SetClipboardData(CF_HDROP, global_mem.release());
-        
-        // Register and set the preferred drop effect
-        UINT uDropEffectFmt = RegisterClipboardFormat(CFSTR_PREFERREDDROPEFFECT);
-        if (uDropEffectFmt) {
-            HANDLE move_flag = GlobalAlloc(GMEM_MOVEABLE, sizeof(DWORD));
-            if (move_flag) {
-                DWORD* flag_data = static_cast<DWORD*>(GlobalLock(move_flag));
-                if (flag_data) {
-                    *flag_data = DROPEFFECT_MOVE;
-                    GlobalUnlock(move_flag);
-                    SetClipboardData(uDropEffectFmt, move_flag);
-                } else {
-                    GlobalFree(move_flag);
-                }
-            }
-        }
-        CloseClipboard();
-    }
+	if (files.empty()) return;
+	size_t total_size = sizeof(DROPFILES) + sizeof(wchar_t);
+	for (const auto& file : files) total_size += (file.size() + 1) * sizeof(wchar_t);
+	auto global_mem = std::unique_ptr<void, decltype(&GlobalFree)>(GlobalAlloc(GHND, total_size), GlobalFree);
+	if (!global_mem) return;
+	auto* df = static_cast<DROPFILES*>(GlobalLock(global_mem.get()));
+	if (!df) return;
+	df->pFiles = sizeof(DROPFILES);
+	df->fWide = TRUE;
+	wchar_t* data = reinterpret_cast<wchar_t*>(df + 1);
+	for (const auto& file : files) {
+		std::copy_n(file.c_str(), file.size(), data);
+		data += file.size();
+		*data++ = L'\0';
+	}
+	*data = L'\0';
+	GlobalUnlock(global_mem.get());
+	if (OpenClipboard(nullptr)) {
+		EmptyClipboard();
+		SetClipboardData(CF_HDROP, global_mem.release());
+		UINT uDropEffectFmt = RegisterClipboardFormat(CFSTR_PREFERREDDROPEFFECT);
+		if (uDropEffectFmt) {
+			HANDLE move_flag = GlobalAlloc(GMEM_MOVEABLE, sizeof(DWORD));
+			if (move_flag) {
+				DWORD* flag_data = static_cast<DWORD*>(GlobalLock(move_flag));
+				if (flag_data) {
+					*flag_data = DROPEFFECT_MOVE;
+					GlobalUnlock(move_flag);
+					SetClipboardData(uDropEffectFmt, move_flag);
+				} else GlobalFree(move_flag);
+			}
+		}
+		CloseClipboard();
+	}
 }
