@@ -6,6 +6,8 @@ set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Allow /MT to actually take effect.
 set(CMAKE_CXX_FLAGS_RELEASE "/O2 /MT")
 
+add_executable(fclear src/fclear.cpp)
 add_executable(fcopy src/fcopy.cpp)
 add_executable(fcut src/fcut.cpp)
+add_executable(flist src/flist.cpp)
 add_executable(fpaste src/fpaste.cpp)
