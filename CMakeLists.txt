@@ -7,4 +7,5 @@ set(CMAKE_MSVC_RUNTIME_LIBRARY "MultiThreaded$<$<CONFIG:Debug>:Debug>") # Allow 
 set(CMAKE_CXX_FLAGS_RELEASE "/O2 /MT")
 
 add_executable(fcopy src/fcopy.cpp)
+add_executable(fcut src/fcut.cpp)
 add_executable(fpaste src/fpaste.cpp)
