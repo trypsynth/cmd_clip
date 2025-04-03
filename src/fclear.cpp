@@ -1,4 +1,4 @@
-/* fclear.cpp - clear the Windows clipboard.
+/* fclear.cpp - clear any files from the Windows clipboard.
  *
  * Copyright (C) 2025 Quin Gillespie.
  *
@@ -18,8 +18,7 @@ int wmain() {
 		return 1;
 	}
 	UINT formats_to_remove[] = {CF_HDROP};
-	for (UINT format : formats_to_remove)
-		if (IsClipboardFormatAvailable(format)) EmptyClipboard();
+	for (UINT format : formats_to_remove) if (IsClipboardFormatAvailable(format)) EmptyClipboard();
 	CloseClipboard();
 	std::wcout << L"File contents removed from clipboard.\n";
 	return 0;
