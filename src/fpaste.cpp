@@ -21,14 +21,14 @@ namespace fs = std::filesystem;
 std::vector<std::wstring> get_clipboard_files();
 
 int wmain() {
-	auto files = get_clipboard_files();
+	auto files{get_clipboard_files()};
 	if (files.empty()) {
 		std::wcout << L"No files on clipboard.\n";
 		return 1;
 	}
-	fs::path cwd = fs::current_path();
+	auto cwd{fs::current_path()};
 	for (const auto& file : files) {
-		fs::path dest = cwd / fs::path(file).filename();
+		auto dest{cwd / fs::path(file).filename()};
 		try {
 			fs::copy(file, dest, fs::copy_options::overwrite_existing);
 			std::wcout<< L"Copied " << file << L" to " << dest << L"\n";

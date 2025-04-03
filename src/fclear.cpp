@@ -18,8 +18,8 @@ int wmain() {
 		std::wcerr << L"Failed to open clipboard. Error: " << GetLastError() << L"\n";
 		return 1;
 	}
-	const std::array<UINT, 1> formats_to_remove = {CF_HDROP};
-	bool cleared_anything = false;
+	const std::array<UINT, 1> formats_to_remove{CF_HDROP};
+	bool cleared_anything{false};
 	for (const auto& format : formats_to_remove) {
 		if (IsClipboardFormatAvailable(format)) {
 			if (!EmptyClipboard()) {

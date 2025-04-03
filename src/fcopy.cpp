@@ -27,24 +27,24 @@ int wmain(int argc, wchar_t** argv) {
 		return 1;
 	}
 	std::vector<std::wstring> files;
-	for (int i = 1; i < argc; ++i) files.emplace_back(fs::absolute(argv[i]).wstring());
+	for (int i{1}; i < argc; ++i) files.emplace_back(fs::absolute(argv[i]).wstring());
 	copy_to_clipboard(files);
 	return 0;
 }
 
 void copy_to_clipboard(const std::vector<std::wstring>& files) {
 	if (files.empty()) return;
-	size_t total_size = sizeof(DROPFILES) + sizeof(wchar_t);
+	size_t total_size{sizeof(DROPFILES) + sizeof(wchar_t)};
 	for (const auto& file : files) total_size += (file.size() + 1) * sizeof(wchar_t);
-	auto global_mem = std::unique_ptr<void, decltype(&GlobalFree)>(GlobalAlloc(GHND, total_size), GlobalFree);
+	auto global_mem{std::unique_ptr<void, decltype(&GlobalFree)>(GlobalAlloc(GHND, total_size), GlobalFree)};
 	if (!global_mem) return;
-	auto* df = static_cast<DROPFILES*>(GlobalLock(global_mem.get()));
+	auto* df{static_cast<DROPFILES*>(GlobalLock(global_mem.get()))};
 	if (!df) return;
 	df->pFiles = sizeof(DROPFILES);
 	df->fWide = TRUE;
-	wchar_t* data = reinterpret_cast<wchar_t*>(df + 1);
+	wchar_t* data{reinterpret_cast<wchar_t*>(df + 1)};
 	for (const auto& file : files) {
-		std::copy_n(file.c_str(), file.size(), data);
+		std::copy(file.begin(), file.end(), data);
 		data += file.size();
 		*data++ = L'\0';
 	}

@@ -18,22 +18,22 @@ int wmain() {
 		std::wcerr << L"Failed to open clipboard.\n";
 		return 1;
 	}
-	HANDLE data = GetClipboardData(CF_HDROP);
+	HANDLE data{GetClipboardData(CF_HDROP)};
 	if (!data) {
 		std::wcout << L"No files on clipboard.\n";
 		CloseClipboard();
 		return 0;
 	}
-	HDROP drop = static_cast<HDROP>(GlobalLock(data));
+	HDROP drop{static_cast<HDROP>(GlobalLock(data))};
 	if (!drop) {
 		std::wcerr << L"Failed to read clipboard data.\n";
 		CloseClipboard();
 		return 1;
 	}
-	UINT file_count = DragQueryFileW(drop, 0xFFFFFFFF, nullptr, 0);
+	UINT file_count{DragQueryFileW(drop, 0xFFFFFFFF, nullptr, 0)};
 	if (file_count == 0) std::wcout << L"No files on clipboard.\n";
 	else {
-		for (UINT i = 0; i < file_count; ++i) {
+		for (UINT i{0}; i < file_count; ++i) {
 			wchar_t file_path[MAX_PATH];
 			if (DragQueryFileW(drop, i, file_path, MAX_PATH)) std::wcout << file_path << L"\n";
 		}
