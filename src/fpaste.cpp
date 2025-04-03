@@ -11,7 +11,6 @@
 
 #include <filesystem>
 #include <iostream>
-#include <sstream>
 #include <string>
 #include <vector>
 #include <windows.h>
@@ -28,17 +27,15 @@ int wmain() {
 		return 1;
 	}
 	fs::path cwd = fs::current_path();
-	std::wostringstream output;
 	for (const auto& file : files) {
 		fs::path dest = cwd / fs::path(file).filename();
 		try {
 			fs::copy(file, dest, fs::copy_options::overwrite_existing);
-			output << L"Copied " << file << L" to " << dest << L"\n";
+			std::wcout<< L"Copied " << file << L" to " << dest << L"\n";
 		} catch (const std::exception& e) {
 			std::wcerr << L"Failed to copy " << file << L": " << e.what() << L"\n";
 		}
 	}
-	std::wcout << output.str();
 	return 0;
 }
 
