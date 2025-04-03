@@ -17,8 +17,10 @@ int wmain() {
 		std::wcerr << L"Failed to open clipboard.\n";
 		return 1;
 	}
-	EmptyClipboard();
+	UINT formats_to_remove[] = {CF_HDROP};
+	for (UINT format : formats_to_remove)
+		if (IsClipboardFormatAvailable(format)) EmptyClipboard();
 	CloseClipboard();
-	std::wcout << L"Clipboard cleared.\n";
+	std::wcout << L"File contents removed from clipboard.\n";
 	return 0;
 }
