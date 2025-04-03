@@ -9,17 +9,28 @@
  * 3. This notice may not be removed or altered from any source distribution.
 */
 
+#include <array>
 #include <iostream>
 #include <windows.h>
 
 int wmain() {
 	if (!OpenClipboard(nullptr)) {
-		std::wcerr << L"Failed to open clipboard.\n";
+		std::wcerr << L"Failed to open clipboard. Error: " << GetLastError() << L"\n";
 		return 1;
 	}
-	UINT formats_to_remove[] = {CF_HDROP};
-	for (UINT format : formats_to_remove) if (IsClipboardFormatAvailable(format)) EmptyClipboard();
+	const std::array<UINT, 1> formats_to_remove = {CF_HDROP};
+	bool cleared_anything = false;
+	for (const auto& format : formats_to_remove) {
+		if (IsClipboardFormatAvailable(format)) {
+			if (!EmptyClipboard()) {
+				std::wcerr << L"Failed to clear clipboard content.\n";
+				CloseClipboard();
+				return 1;
+			}
+			cleared_anything = true;
+		}
+	}
 	CloseClipboard();
-	std::wcout << L"File contents removed from clipboard.\n";
+	if (cleared_anything) std::wcout << L"File contents removed from clipboard.\n";
 	return 0;
 }
