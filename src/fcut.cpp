@@ -23,7 +23,7 @@ void cut_to_clipboard(const std::vector<std::wstring>& files);
 
 int wmain(int argc, wchar_t** argv) {
 	if (argc < 2) {
-		std::wcerr << L"Usage: " << argv[0] << L" <file1> [file2 ...>\n";
+		std::wcerr << L"Usage: " << argv[0] << L" <file1> [file2 ...]\n";
 		return 1;
 	}
 	std::vector<std::wstring> files;
@@ -53,15 +53,15 @@ void cut_to_clipboard(const std::vector<std::wstring>& files) {
 	if (OpenClipboard(nullptr)) {
 		EmptyClipboard();
 		SetClipboardData(CF_HDROP, global_mem.release());
-		UINT uDropEffectFmt = RegisterClipboardFormat(CFSTR_PREFERREDDROPEFFECT);
-		if (uDropEffectFmt) {
-			HANDLE move_flag = GlobalAlloc(GMEM_MOVEABLE, sizeof(DWORD));
+		UINT drop_effect_fmt{RegisterClipboardFormat(CFSTR_PREFERREDDROPEFFECT)};
+		if (drop_effect_fmt) {
+			HANDLE move_flag{GlobalAlloc(GMEM_MOVEABLE, sizeof(DWORD))};
 			if (move_flag) {
-				DWORD* flag_data = static_cast<DWORD*>(GlobalLock(move_flag));
+				DWORD* flag_data{static_cast<DWORD*>(GlobalLock(move_flag))};
 				if (flag_data) {
 					*flag_data = DROPEFFECT_MOVE;
 					GlobalUnlock(move_flag);
-					SetClipboardData(uDropEffectFmt, move_flag);
+					SetClipboardData(drop_effect_fmt, move_flag);
 				} else GlobalFree(move_flag);
 			}
 		}

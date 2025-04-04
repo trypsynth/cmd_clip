@@ -39,5 +39,7 @@ fclear
 
 ### `flist` – List files currently on the clipboard
 ```sh
-flist
+flist [-i]
 ```
+
+-i will display much more detailed information about the files on your clipboard.
