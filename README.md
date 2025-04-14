@@ -16,28 +16,27 @@ cmake --build . --config Release
 ```
 
 ## Usage
-
-### `fcopy` – Copy files to the clipboard
+### `fcopy` - Copy files to the clipboard
 ```sh
 fcopy <file1> [file2 ...]
 ```
 
-### `fcut` – Cut (move) files to the clipboard
+### `fcut` - Cut (move) files to the clipboard
 ```sh
 fcut <file1> [file2 ...]
 ```
 
-### `fpaste` – Paste files from the clipboard
+### `fpaste` - Paste files from the clipboard
 ```sh
 fpaste
 ```
 
-### `fclear` – Clear the clipboard
+### `fclear` - Clear the clipboard
 ```sh
 fclear
 ```
 
-### `flist` – List files currently on the clipboard
+### `flist` - List files currently on the clipboard
 ```sh
 flist [-i]
 ```
